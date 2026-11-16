@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>无限画布</title>
+<style>
+  /* Cue cue009's published video differs from its prompt. This follows the video
+     (blue-violet Octopus hero), with the requested canvas button and app branding. */
+  :root { color-scheme:dark; --ink:#fff; --nav-bg:#111117; --nav-line:#ffffff25; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Inter,"Segoe UI","Microsoft YaHei",sans-serif; background:#03030c; color:var(--ink); }
+  button,a { -webkit-tap-highlight-color:transparent; }
+  button { font:inherit; cursor:pointer; }
+  a { color:inherit; text-decoration:none; }
+  button:focus-visible,a:focus-visible { outline:2px solid #aaa5ff; outline-offset:5px; }
+  .hero { position:relative; height:100dvh; min-height:420px; overflow:hidden; isolation:isolate; background:#03030c; }
+  .aurora { position:absolute; inset:-2%; z-index:-1; background:radial-gradient(ellipse 85% 45% at 50% 105%,#fff 0%,#f5f4ff 30%,#c3baff 56%,transparent 85%),radial-gradient(ellipse 95% 68% at 50% 120%,#fff 20%,#f2efff 49%,#7972f3 74%,transparent 100%),radial-gradient(ellipse 100% 65% at 58% 89%,#2821f3 35%,#1813a8 55%,#050419 84%,#000 100%); animation:drift 16s ease-in-out infinite alternate; }
+  .grain { position:absolute; inset:0; z-index:-1; opacity:.055; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23n)' opacity='.5' d='M0 0h180v180H0z'/%3E%3C/svg%3E"); }
+  .brand { position:absolute; z-index:3; top:26px; left:50%; translate:-50% 0; display:flex; gap:10px; align-items:center; padding:5px 10px; border:0; background:transparent; color:var(--ink); font-size:20px; letter-spacing:.03em; animation:brand-arrive 2.5s both; }
+  .brand-mark { width:27px; height:27px; background:currentColor; mask:url('./logo.svg') center/contain no-repeat; -webkit-mask:url('./logo.svg') center/contain no-repeat; }
+  .brand:hover { background:#ffffff0a; border-radius:6px; }
+  .content { position:absolute; inset:25% 24px auto; display:grid; justify-items:center; text-align:center; animation:content-arrive 1s 1.7s both; }
+  h1 { margin:0; font-size:clamp(30px,3.7vw,62px); font-weight:400; letter-spacing:-.035em; line-height:1.4; text-wrap:balance; }
+  h1 em { font-family:Georgia,"Noto Serif SC",serif; font-weight:400; }
+  .open-canvas { margin-top:48px; display:flex; align-items:center; justify-content:space-between; gap:48px; width:min(420px,100%); padding:22px 24px 22px 32px; border-radius:24px; color:#252337; background:#fffffff2; box-shadow:0 12px 50px #25205622,inset 0 1px #fff; font-size:19px; transition:transform .2s,box-shadow .2s; }
+  .open-canvas:hover { transform:translateY(-3px); box-shadow:0 18px 60px #25205635,inset 0 1px #fff; }
+  .open-canvas .arrow { display:grid; place-items:center; width:36px; height:36px; border-radius:50%; background:#e9e7ef; font-size:22px; }
+  .hint { margin:22px 0 0; color:#eeecff; font-size:13px; letter-spacing:.08em; }
+  .footer { position:absolute; bottom:28px; left:40px; right:124px; display:flex; justify-content:space-between; align-items:center; gap:20px; font-size:12px; color:#494464; animation:content-arrive .8s 2.1s both; }
+  .footer button { background:#ffffffa8; color:#302b49; border:0; border-radius:30px; padding:10px 18px; }
+  .menu { position:absolute; z-index:4; top:72px; left:50%; translate:-50% 0; width:200px; padding:6px; border:1px solid var(--nav-line); border-radius:8px; background:var(--nav-bg); box-shadow:0 16px 40px #0004; }
+  .menu[hidden] { display:none; }
+  .menu a,.menu button { display:block; width:100%; padding:11px 14px; text-align:left; border:0; border-radius:4px; background:transparent; color:#eee; font-size:13px; }
+  .menu a:hover,.menu button:hover { background:#ffffff10; }
+  .menu hr { border:0; border-top:1px solid var(--nav-line); margin:5px 0; }
+  @keyframes brand-arrive { 0%,40% { top:46%; transform:scale(1.6); flex-direction:column; gap:8px; } 65% { top:46%; transform:scale(1.6); flex-direction:column; gap:8px; } 100% { top:26px; transform:scale(1); } }
+  @keyframes content-arrive { from { opacity:0; transform:translateY(18px); filter:blur(5px); } to { opacity:1; transform:translateY(0); filter:blur(0); } }
+  @keyframes drift { from { transform:scale(1) rotate(-3deg); } to { transform:scale(1.08) rotate(3deg); } }
+  @media(max-width:640px) { .content { top:29%; } .brand { font-size:17px; } .open-canvas { margin-top:36px; padding:18px 22px; border-radius:20px; } .footer { left:24px; right:24px; bottom:24px; } .hint { font-size:12px; letter-spacing:0; } }
+  @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; } }
+</style>
+<main class="hero">
+  <div class="aurora" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>
+  <button class="brand" aria-label="打开首页导航" aria-expanded="false" aria-controls="home-menu"><span class="brand-mark" aria-hidden="true"></span><span>无限画布</span></button>
+  <nav id="home-menu" class="menu" aria-label="首页导航" hidden>
+    <a href="./canvas" target="_parent">我的画布</a><a href="./image" target="_parent">图片工作台</a><a href="./video" target="_parent">视频工作台</a>
+    <hr><button data-action="accounts">账号连接</button><button data-action="platforms">平台连接</button><button data-action="settings">偏好设置</button>
+  </nav>
+  <section class="content">
+    <h1>无限画布 — 从<em>灵感</em>出发<br>让想象成为眼前的<em>画面</em></h1>
+    <a class="open-canvas" href="./canvas" target="_parent"><span>打开画布</span><span class="arrow" aria-hidden="true">↗</span></a>
+    <p class="hint">参考图、图像与视频，在同一张画布上创作。</p>
+  </section>
+  <footer class="footer"><span>从一个想法，到完整作品。</span><button data-action="accounts">连接我的账号 ↗</button></footer>
+</main>
+<script>
+  const brand = document.querySelector('.brand');
+  const menu = document.querySelector('.menu');
+  function closeMenu() { menu.hidden = true; brand.setAttribute('aria-expanded','false'); }
+  brand.addEventListener('click', () => { menu.hidden = !menu.hidden; brand.setAttribute('aria-expanded', String(!menu.hidden)); });
+  document.addEventListener('pointerdown', event => { if (!brand.contains(event.target) && !menu.contains(event.target)) closeMenu(); });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && !menu.hidden) { closeMenu(); brand.focus(); } });
+  for (const button of document.querySelectorAll('[data-action]')) button.addEventListener('click', () => { parent.postMessage({ type:'canvas-home-action', action:button.dataset.action }, location.origin); closeMenu(); });
+</script>
+</html>

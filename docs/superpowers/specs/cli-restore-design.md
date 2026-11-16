@@ -1,0 +1,17 @@
+# Restore CLI generation channels and Agent choice
+
+User explicitly requested both old CLI generation channels and Codex/Gemini Agent modes. Preserve the five-platform implementation and all existing user data. The old Gemini route preferred Antigravity; show these as separate, explicitly selected engines.
+
+## Shared contract
+
+Extend existing `/api/connectors/providers`, `/jobs`, `/files` with providers `codex-cli`, `gemini-cli`, `antigravity-cli`. Each uses the existing ProviderSummary shape, config fields `executable` and optional `imageExecutable`, text/image action availability in `actions`, and optional read-only details. No credentials are copied into the browser config. Installed and authenticated are separate states; checks only run local help/version/auth-status where supported. CLI login remains in the official client/terminal. No automatic model requests or paid test generation.
+
+Local CLI providers export `createLocalCliProviders(ctx)` from `canvas-connectors/src/providers/local-cli.mjs`. They implement existing submit/query/cancel contract. A CLI execution has its own durable run ID, isolated working directory, persisted completion, and no automatic restart/re-submit. Outputs use `{path,name,mimeType,kind}` under `dataDir/cli-results/<job.id>/`; text result is UTF-8 `text/plain`, kind `text`. Cancellation terminates only that owned process. Never use shell interpolation, yolo, dangerously-skip-permissions, credential extraction, or automatic API fallback.
+
+Text job: `preset.action='text'`, selected CLI model in `preset.model` (omit to use explicitly chosen CLI default), `preset.params={messages?:[{role,content}], mode?:'chat'|'canvas', canvas?:object}`, prompt is the user's current request. Image job: action `image`, params `{size?,quality?,count?}` with inputs as uploaded image file IDs. Only expose image generation when a verified local image tool exists; absent tools must yield a clear unavailable state, never text pretending to be an image. Codex's previous image helper is `gpt-image-2-skill`; inspect actual local installation/help before reuse. Antigravity support must retain normal permission checks.
+
+Frontend API formats gain `codex-cli`, `gemini-cli`, `antigravity-cli`; no API Key or remote URL required. Add explicit local CLI config section and manual model IDs. Image/text APIs route those formats to the existing job protocol; one unique requestId per deliberate call, no automatic resubmit. Preserve all existing HTTP channels and model selections. Reject unsupported video/audio requests locally. Browser cancellation should not pretend an already-submitted job was refunded.
+
+Agent UI keeps current Codex implementation, and adds Gemini/Antigravity view with independent persisted messages. To operate canvas, include a snapshot with an explicit request and request structured `{reply,ops}`. User reviews/applies the operations to the same originating canvas; no silent switching canvas or arbitrary DOM/shell actions. Use existing canvas operation validation/application. This does not pretend to implement Codex thread/skill protocol for Gemini.
+
+Root integrates local service provider registration and text outputs, makes Codex manual connection discoverable, starts the current Canvas Agent, and adds same-origin local bootstrap where needed. Preserve explicit Local URL/Connect token overrides and never log their raw values. Existing services remain live until a candidate build passes targeted tests and browser checks.

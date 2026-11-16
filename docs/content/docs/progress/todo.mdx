@@ -1,0 +1,44 @@
+---
+title: TODO
+description: Planned follow-up work
+---
+
+# TODO
+
+- UI collaboration: agree on one complete canvas composition and shared visual/interaction rules before adapting individual Cue references or expanding the homepage. Follow `docs/ui-collaboration/brief.en.md`; component-by-component reproduction is no longer the design acceptance target.
+
+- UI annotations and the eight reported bug fixes are listed under pending tests. Accept fixes by their original IDs and close only after user confirmation. Continue investigating the intermittent Codex catalog failure and reviewing the full homepage animation; read-only connection checks do not prove generation success.
+
+- 本机跨浏览器保存代码已移入待测试：重启服务后先在原浏览器打开，确认现有画布与素材复制，再用其他浏览器验收。相同记录的不同浏览器旧副本保留在各自浏览器，暂不自动合并；项目目录选择、备份管理及完整项目包继续按 F08 实现。
+
+- 验收可灵其他参考图操作、视频节点状态、收起编辑器后的跟踪和结果回填；首尾帧生成及从原任务恢复本机下载已验证，旧无任务 ID 记录仍可核查后手动开始新一轮。
+
+- 按 LibTV 对照继续验收节点尺寸、引用素材排序、悬浮工具和双主题细节；即梦／可灵 Windows 安装授权、模型菜单和参数已移入待测试，继续验收真实生成与结果回填。
+
+## Local AI Canvas PRD
+
+The current image/video and creative-assistant scope is defined in `docs/superpowers/specs/local-ai-canvas-prd.md`. The items below are remaining work; completed foundation changes are recorded in Pending Tests. Existing entries below remain as historical follow-up context; they do not make all five providers or director/storyboard features first-release requirements.
+
+- F01–F02: verify Windows and macOS onboarding, personal GPT/Google capabilities, and shared Kling/Jimeng/RunningHub access; prepare one-time shared connection-package import and explicit paid-API fallback.
+- F01–F02 clarification: show GPT, Gemini, Kling, Jimeng and named RunningHub workflows without personal/shared-channel categories. Follow PRD section 7.3 and `research/platform-access-decision.md`: Kling official CLI, independently validated Jimeng CLI, RunningHub Workflow API; do not treat the read-only RunningHub MCP as a generation service. The Jimeng first/last-frame adapter is implemented; verify its live generation separately.
+- F03–F07: ordinary image/video flows for applicable Kling, Jimeng and RunningHub presets have moved to Pending Tests. Continue GPT/Gemini batch-history unification, reference ordering, drag-out interaction, historical parameter restoration and full provenance on extracted nodes; complete unverified video modes and real-account recovery acceptance without automatic resubmission.
+- F07 real-platform follow-up: verify result-list completeness and source identity when signed URLs change during recovery. Offline tests cover unchanged sources; they do not prove cross-query identity for all providers.
+- Live-platform acceptance: Windows Kling/Jimeng installation, authorization and connection checks are complete. Verify generation, non-cancellable Kling submissions, expiring-result archiving and recovery. RunningHub still needs its consumer-member Key and the workflow list to be supplied later.
+- F08: add local project-directory persistence, automatic source/output archiving and credential-free cross-platform project packages; keep existing browser data intact.
+- F09–F10: extend the new RunningHub mapping form with configurable user-facing parameters, real trial runs, immutable versions, publishing and automatic catalog synchronization on application startup. The current form saves local presets only. The initial workflow list is intentionally unselected and will be supplied later.
+- F11: reuse the local Codex app-server conversation channel for multi-turn chat, selected-image analysis, prompt suggestions and explicit application to a target node; do not automatically execute generation.
+- Validate the delivery against A01–A29 in the PRD. Define new concurrency, timeout, retry and file-size behavior with the user before implementation.
+
+## Existing follow-up items
+
+- Finish Windows account acceptance for Gemini and the five platforms, and verify old canvas/config imports from the Mac. Copying source files alone does not migrate browser data or CLI authorization.
+- Diagnose the independent `codex_apps` extension initialization failure in the bundled Codex Agent; the canvas MCP is ready, so this is separate from canvas service startup. Do not change the global Codex extensions or runtime version without checking the integration requirements.
+
+- Verify real native Codex image generation and reference editing with user-authorized account usage; validate current model access and quota without assuming subscription entitlement. Add ComfyUI official as a separate provider only after its authentication, API rights and task contract are verified.
+- Revisit the paused prompt library after the user curates useful prompts; retain current data until then.
+
+- Verify an official image-tool contract for Gemini/Antigravity that can use the existing account entitlement before adding image adapters; text responses and web login alone are not image-generation support.
+- Evaluate the current Jimeng remote-canvas CLI as a separate adapter after account authorization; its project/node protocol must not be mixed with the standalone `dreamina` adapter. Add model discovery and workflow-parameter import after real-platform acceptance.
+
+- Replace the Claude Code CLI adapter with a Claude Agent SDK adapter and improve the tool queue, following the [Local Agent Integration Plan](/docs/progress/local-agent-integration-plan).
+- Add Skill installation from web search, Skill resource-file management, and controlled local-memory persistence.

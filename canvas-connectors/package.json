@@ -1,0 +1,21 @@
+{
+  "name": "@infinite-canvas/connectors",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@agentclientprotocol/sdk": "2.6.0",
+    "cross-spawn": "^7.0.6",
+    "pngjs": "^7.0.0",
+    "read-cmd-shim": "^6.0.0",
+    "sharp": "0.35.5",
+    "which": "^5.0.0"
+  }
+}

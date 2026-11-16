@@ -1,0 +1,23 @@
+---
+title: Platform node preview tests
+description: Manual acceptance for image and video platform nodes
+---
+
+# Platform node preview tests
+
+Run `node start-dev.mjs` from the repository root and open http://127.0.0.1:5173/canvas . This runs the source preview without building. Existing dependencies must be installed. The packaged app on port 3000 remains unchanged; browser projects and connector settings are separate. Development connector data lives in `.infinite-canvas/connectors-development` under the user home.
+
+See `platform-node-preview.zh-CN.mdx` for the detailed Chinese test procedure matching the product labels.
+
+1. Add ordinary image and video nodes. Use the single bottom model menu for personal models and platform presets. Unconfigured platforms open setup. Switching models retains the prompt; unresolved tasks block switching.
+2. After CLI authorization/check, Kling and Jimeng models appear directly in the node menu with applicable parameter controls. RunningHub still requires a real workflow preset. Saving or selecting presets does not generate content.
+3. Connect references, assign roles, then manually generate. Verify reference-image editing, single-image video and supported Kling first/last frames. Jimeng frames2video is wired to explicit first/last roles; its live generation still needs acceptance.
+4. Results stay in the source node. Existing selected output must not change until a candidate is selected. Start another round and inspect history; selection and extracting a result must not generate again.
+5. Refresh and reopen the node panel: query the original task without resubmitting. Query errors must allow recovery and an explicit, user-confirmed new round. Storage failure before submission must prevent spending; partial imports retain saved results.
+6. Switch canvases or delete a node during an operation and verify that late results never update a different target. Polling currently follows the open node panel, while remote work continues after leaving it.
+
+`node web/tests/platform-preview-fixture.mjs` produces a synthetic importable ZIP in the system temporary directory. It contains no real task and must not be used to submit generation. IAB import now verified candidate selection, uncertain-task confirmation and history selection after switching back to an API model. No generation was submitted.
+
+Windows now has official Kling CLI 0.2.3 and Dreamina CLI 1.4.22 installed and user-authorized; both local checks report ready. Current connector and related frontend behavior tests: 150 passed, one existing Windows symlink-permission skip. Browser checks cover the unified editor, live model choices, parameters and history selection. No build/type check, live generation or macOS acceptance was performed. Actual submission, entitlement and result archiving remain manual acceptance items.
+
+Follow-up: GPT/Gemini history unification, restoring historical parameters, complete provenance on extracted nodes, drag-out interaction, local project directories, workflow publishing/sync and desktop packaging.
